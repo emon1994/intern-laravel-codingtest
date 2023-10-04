@@ -26,13 +26,31 @@
         </div>
         <script type="module">
             $(document).ready(function () {
-                // Function to fetch and display data
-                function fetchData(searchTerm, route) {
+                $('#search').on('keyup', function() {
+                    var searchTerm = $(this).val();
                     $.ajax({
-                        type: "GET",
-                        url: route,
+                        url: "{{ route('products.auto') }}",
+                        type: 'GET',
+                        data: {
+                            search: searchTerm
+                        },
+                        success: function(response) {
+                            var productTable = $('#productTable');
+                            productTable.empty();
+                            
+                            if (response.length > 0) {
+                                $.each(response, function(index, data) {
+                                    productTable.append('<tr><td class="border px-4 py-2">' + data.name 
+                                    + '</td><td class="border px-4 py-2">' + data.description 
+                                    + '</td><td class="border px-4 py-2">' + '৳'+data.price 
+                                    + '</td></tr>');
+                                });
+                            } else {
+                                productTable.append('<tr><td colspan="3">No results found</td></tr>');
+                            }
+                        }
                     });
-                }
+                });
             });
         </script>
     </div>

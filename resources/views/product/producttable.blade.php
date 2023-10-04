@@ -6,7 +6,7 @@
             <th class="px-4 py-2">Price</th>
         </tr>
     </thead>
-    <tbody>
+    <tbody id="productTable">
         @foreach ($products as $product)
         <tr>
             <td class="border px-4 py-2">{{ $product->name }}</td>
