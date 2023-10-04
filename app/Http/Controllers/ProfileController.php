@@ -8,6 +8,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\View\View;
+use App\Models\User;
+use Illuminate\Validation\Rule;
 
 class ProfileController extends Controller
 {
@@ -24,9 +26,19 @@ class ProfileController extends Controller
     /**
      * Update the user's profile information.
      */
-    public function update(): RedirectResponse
+    public function update(Request $request): RedirectResponse
     {
-        // Write your own code 
+        $user = $request->user();
+        $rules=[
+            'name'=>['required'],
+            'email'=>['required', 'email', Rule::unique('users')->ignore($user->id)],
+        ];
+        $this->validate($request,$rules);
+        $user->update([
+            'name'=>$request->name,
+            'email'=>$request->email
+        ]);
+        return redirect()->back()->with('status', 'Success Alert! profile-updated');
     }
 
     /**
