@@ -22,7 +22,14 @@ class ProductController extends Controller
 
     public function searchProduct(Request $request)
     {
+        $search= $request->search;
         
+        $products= Product::where('name','LIKE','%'.$search.'%')
+        ->orWhere('description','LIKE','%'.$search.'%')
+        ->orWhere('price','LIKE','%'.$search.'%')->get();
+       
+        return view('product.view',compact('products'));
+    
     }
     
 }
